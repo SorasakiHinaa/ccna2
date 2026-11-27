@@ -1,0 +1,156 @@
+@coretaas
+config t
+ ip routing
+ int fa0/9
+ no sw
+ no shut
+ ip add 192.168.56.60 255.255.255.192
+end
+
+@corebaba
+config t
+ ip routing
+ int fa0/9
+ no sw
+ no shut
+ ip add 192.168.56.65 255.255.255.192
+end
+
+
+#Static Shiv Routing
+
+Recipe:
+ip route [destination] [mask] [exit-interface/next-hop]
+
+Task 1 Configure a Static host route from r1 destined to 10.1.1.5
+
+@R1
+config t
+ ip route 10.1.1.10 255.255.255.255 10.1.1.2
+end
+ping 10.1.1.5
+
+@R1
+config t
+ ip route 10.1.1.6 255.255.255.255 10.1.1.2
+end
+ping 10.1.1.6
+
+@R3
+config t
+ no ip route 10.1.1.0 255.255.255.252 10.1.1.2
+ ip route 10.1.1.0 255.255.255.252 10.1.1.5
+end
+ping 10.1.1.1
+
+@R4
+config t
+ ip route 10.1.1.0 255.255.255.252 10.1.1.9
+end
+ping 10.1.1.1
+
+
+
+
+@R1
+config t
+ ip route 10.1.1.8 255.255.255.252 10.1.1.2
+end
+
+@R2
+config t
+ ip route 10.1.1.4 255.255.255.252 10.1.1.6
+end
+
+@R3
+config t
+ ip route 10.1.1.8 255.255.255.252 10.1.1.10
+end
+
+@R4
+config t
+ ip route 10.1.1.0 255.255.255.252 10.1.1.9
+end
+ping 10.1.1.1
+
+
+!@A2
+conf t
+ ip route 0.0.0.0 0.0.0.0 192.168.1.130 1
+ ip route 0.0.0.0 0.0.0.0 192.168.1.129 10
+ end
+
+
+configuring dynamic routing protocl
+step1 find the directly connected networks
+
+c1
+vlan 10 : 10.2.1.0/24
+vlan 20 : 10.2.2.0/24
+vlan 100: 192.168.1.128/27
+	  10.1.4.4/30
+
+c2
+vlan 10 : 10.2.1.0/24
+vlan 20 : 10.2.2.0/24
+vlan 100 : 192.168.1.130/27
+	   10.1.4.8/30
+
+EIGRP
+!c1
+conf t
+ router eigrp 100
+  network 10.2.1.0      0.0.0.255
+  network 10.2.2.0      0.0.0.255
+  network 192.168.1.128 0.0.0.31
+  network 10.1.4.4      0.0.0.3
+end
+
+!c2
+conf t
+ router eigrp 100
+  network 10.2.1.0      0.0.0.255
+  network 10.2.2.0      0.0.0.255
+  network 192.168.1.128 0.0.0.31
+  network 10.1.4.8      0.0.0.3
+end
+
+sh ip eigrp neighbor
+
+
+EIGRP
+!R1
+conf t
+ router eigrp 100
+  network 10.46.187.22  0.0.0.0
+  network 192.168.0.152 0.0.0.3                             network 10.0.15.64    0.0.0.31       
+                                       
+!@EDGE
+conf t 
+ int g0/0/0
+  ip nat inside
+ int g0/0/1
+  ip nat outside
+
+!@P1
+conf t
+ ip route 0.0.0.0  0.0.0.0  10.2.1.1
+end
+ping 8.8.8.8      
+
+
+!@P2
+conf t
+ ip route 0.0.0.0  0.0.0.0  10.2.1.2
+end
+ping 8.8.8.8    
+
+a:c::/64
+::/0
+fe80::a:0:0:f/64
+2002:6500:0:3000::/64
+::1/128
+ff00::beef:a00a:aa0:0:0/64
+
+
+3rd 8i 0080 0100 0180 0200 0280               

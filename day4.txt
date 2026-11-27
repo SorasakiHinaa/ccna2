@@ -1,0 +1,230 @@
+C:2 bits
+A:88 + 2 = 90 =/90  6 3rd 4i
+I:fd00:0002:0000:0000:0000:0000:0000:0000:/90
+       1st                :0040:
+       2nd                :0080:
+       3rd                :00c0:
+       4th                :0100:  
+fd00:2::0040:0:0/90   
+
+@!I4
+conf t
+ ipv6 unicast-routing
+ int e0/0
+  no shut
+  ipv6 add fd00:2::80:0:1/90
+end
+
+@!R4
+conf t
+ ipv6 unicast-routing
+ int e0/0
+  no shut
+   no ipv6 add fd00:2::bf:ffff:ffff/90
+end
+ping fd00:2::80:0:1
+
+C: 6 bits
+A: 112 + 6 + 118 = hex 8, 2nd , 4i
+I: fd00:0003:0000:0033:0000:0000:0000:0000 /118
+        1st                          :0000:
+        2nd                          :0400:
+        3rd                          :0800:
+        4th                          :0c00:
+        5th                          :1000:
+        6th                          :1400:
+        7th                          :1800:
+
+
+network : fd00:3:0:33::1400 /118
+1st     : fd00:3:0:33::1401 /118
+non any : fd00:3:0:33::177f
+1st any : fd00:3:0:33::1780
+last    : fd00:3:0:33::17ff /118
+not     : fd00:3:0:33::1800 /118
+
+@!R4
+conf t
+ ipv6 unicast-routing
+ int e0/1
+  no shut
+  ipv6 add fd00:3:0:33::1401/118
+end
+
+@!P1
+conf t
+ ipv6 unicast-routing
+ int e0/1
+  no shut
+  ipv6 add fd00:3:0:33::177f/118
+end
+ping fd00:3:0:33::1401
+
+
+
+C: 8 bits
+A: /100 + 8 = /108 + hex 7, 3rd, 1i
+I: fd00:0004:0000:0000:0000:0000:0000:0000: /108
+        1st                     :0000:
+		2nd                     :0010:
+		3rd                     :0020:
+		4th                     :0030:
+		
+network  : fd00:4::0020:0    /108
+1st      : fd00:4::0020:1    /108
+non any  : fd00:4::002f:ff7f /108
+firts any: fd00:4::002f:ff80 /108
+last     : fd00:4::002f:ffff /108
+not      : fd00:4::0030:0    /108
+
+
+git clone https://github.com/4rthurcyber08/sshautomate
+
+
+!@cmd
+netstat -n -p tcp
+
+net use \\10.81.1.10\ipc$
+net use x: /delete
+net use x: \\10.82.1.10\c$
+
+
+!@corebab
+conf t
+ monitor session 1 source interface fa0/3, fa0/5, fa0/7
+ monitor session 1 destination interface fa0/1, fa0/9
+end
+
+
+internet
+conf t
+ ip domain lookup
+ ip name-server 8.8.8.8 
+ ip route 0.0.0.0 0.0.0.0 208.8.8.2
+end
+
+PH ID         66.254.114.41
+RT ID         66.254.114.238
+FT ID         66.254.114.234
+BB ID         66.254.114.234
+PF ID         104.21.55.88
+Sulasok       172.67.159.23
+XH            104.16.3.81
+IT            208.77.20.35
+chaturbate    104.19.162.95
+
+!@UTM-PH
+config t
+ no ip access-list standard NOPORN
+ ip access-list standard NOPORN
+  deny 66.254.114.0  0.0.0.255
+  deny 104.0.0.0     0.255.255.255
+  deny 172.67.159.23 0.0.0.0
+  deny host 208.77.20.35 
+  permit any
+ int gi 1
+  ip access-group NOPORN in
+  end
+show ip access-list int g1
+
+REMOVE
+conf t
+ int gi 1
+  no ip access-group NOPORN in
+end
+
+
+BLOCK SCHOOL
+
+dlsu 104.20.42.168
+ccp  50.6.160.47
+feu  184.168.125.216
+ue   155.137.92.102
+rtu  192.169.173.81
+
+config t
+ no ip access-list standard NOSCHOOL
+ ip access-list standard NOSCHOOL
+  deny host 104.20.42.168
+  deny host 50.6.160.47
+  deny host 184.168.125.216
+  deny host 155.137.92.102 
+  deny host 192.169.173.81
+  permit any
+ int gi 1
+  ip access-group NOSCHOOL in
+end
+
+REMOVE
+conf t
+ int gi 1
+  no ip access-group NOSCHOOl in
+end
+
+
+nmap -v www.neu.edu.ph
+nmap -v www.sti.edu.ph
+nmap -v www.dpwh.gov.ph
+nmap -v www.rtu.edu.ph
+
+!@UTM-PH
+conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host www.bet100.com eq 80 log
+ permit tcp Any host www.bet100.com eq 443 log
+ permit icmp Any host www.bet100.com log
+ permit tcp Any host www.bet100.com eq 22 log
+ permit tcp Any host www.bet100.com eq 53 log
+ Int gi 3
+ no ip access-group FWP4 in
+ int gi 1
+ ip access-group FWP4 in
+end
+
+conf t
+ Int gi 1
+  no ip access-group FWP6 in
+end
+
+!@CMD
+telnet 10.52.1.2
+pass: rtu
+pass: compeng
+pass: pass
+
+HOW TO ESTABLISH SECURE CONNECTION 
+Public Key
+
+!@UTM-PH
+conf t
+ hostname CTAAS-SEC
+ ip domain name ccna.sec
+ crypto key generate rsa
+
+ip ssh version 2
+ line vty 0 14
+  login local
+  transport input all
+  username admin privilege 15 secret pass
+end
+
+RESTCONF
+- Protocol     : https
+- Port         : 443
+- Encoding     : JSON/XML
+- http methods : get put patch delete
+
+RESTCONF
+- Protocol     : ssh
+- Port         : 820
+- Encoding     : XML
+- RPC
+
+Distributed Control Plane 
+
+MGMT PLANE
+CONTROL PLANE
+DATA PLANE
+
+x

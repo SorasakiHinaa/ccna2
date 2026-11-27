@@ -1,0 +1,89 @@
+C:2 bits
+A:88 + 2 = 90 =/90  6 3rd 4i
+I:fd00:0002:0000:0000:0000:0000:0000:0000:/90
+       1st                :0040:
+       2nd                :0080:
+       3rd                :00c0:
+       4th                :0100:  
+fd00:2::0040:0:0/90   
+
+@!I4
+conf t
+ ipv6 unicast-routing
+ int e0/0
+  no shut
+  ipv6 add fd00:2::80:0:1/90
+end
+
+@!R4
+conf t
+ ipv6 unicast-routing
+ int e0/0
+  no shut
+   no ipv6 add fd00:2::bf:ffff:ffff/90
+end
+ping fd00:2::80:0:1
+
+C: 6 bits
+A: 112 + 6 + 118 = hex 8, 2nd , 4i
+I: fd00:0003:0000:0033:0000:0000:0000:0000 /118
+        1st                          :0000:
+        2nd                          :0400:
+        3rd                          :0800:
+        4th                          :0c00:
+        5th                          :1000:
+        6th                          :1400:
+        7th                          :1800:
+
+
+network : fd00:3:0:33::1400 /118
+1st     : fd00:3:0:33::1401 /118
+non any : fd00:3:0:33::177f
+1st any : fd00:3:0:33::1780
+last    : fd00:3:0:33::17ff /118
+not     : fd00:3:0:33::1800 /118
+
+@!R4
+conf t
+ ipv6 unicast-routing
+ int e0/1
+  no shut
+  ipv6 add fd00:3:0:33::1401/118
+end
+
+@!P1
+conf t
+ ipv6 unicast-routing
+ int e0/1
+  no shut
+  ipv6 add fd00:3:0:33::177f/118
+end
+ping fd00:3:0:33::1401
+
+
+
+C: 8 bits
+A: /100 + 8 = /108 + hex 6, 3rd, 1i
+I: fd00:0004:0000:0000:0000:0000:0000:0000: /108
+        1st
+
+git clone https://github.com/4rthurcyber08/sshautomate
+
+
+!@cmd
+netstat -n -p tcp
+
+net use \\10.81.1.10\ipc$
+net use x: /delete
+net use x: \\10.82.1.10\c$
+
+internet
+conf t
+ ip domain lookup
+ ip name-server 8.8.8.8 
+ ip route 0.0.0.0 0.0.0.0 208.8.8.2
+end
+
+PH ID
+66.254.114.41
+
