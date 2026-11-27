@@ -1,0 +1,87 @@
+ip addr
+
+1yearXP
+http://208.8.8.133/otrs/customer.pl
+
+3upXP
+http://208.8.8.133/otrs/index.pl
+
+admin
+C1sc0123
+
+
+3 network eng
+bobo 
+adik	
+magaling 	
+
+208.1Q
+208.1D
+208.1W
+208.1S
+208.1X
+
+@TAAS/PLDTinternet:
+config t
+hostname coretaasPLDT
+Track 1 Int gi 0/1 line-protocol
+Int vlan 1
+standby 1 ip 10.52.1.6
+standby 1 preempt
+standby 1 Priority 150
+standby 1 Track 1 decrement 60
+
+
+config t
+hostname corebabaGLOBE
+Int vlan 1
+standby 1 ip 10.52.1.6
+standby 1 preempt
+end
+
+
+on cicso FW
+config t
+logging on
+logging host 208.8.8.133 transport udp port 9001
+logging trap informational
+end
+!-------
+config t
+archive
+log config
+logging enable
+notify syslog
+end
+!-------------
+config t
+login on-failure log
+login on-success log
+end
+
+cisco and elk stack intergration
+config t
+NO ip access-list standard NOPORN
+ip access-list standard NOPORN
+DENY 66.254.0.0 0.0.255.255 log
+deny 161.49.0.0 0.0.255.255 log
+DENY 104.21.0.0 0.0.255.255 log
+DENY 68.235.0.0 0.0.255.255 log
+DENY 104.17.0.0 0.0.255.255 log
+DENY 88.208.0.0 0.0.255.255 log
+DENY 208.77.0.0 0.0.255.255 log
+DENY 172.67.0.0 0.0.255.255 log
+Permit Any
+Int Gi 1
+ ip access-group NOPORN in
+end
+
+
+hot to run elk stack @ home
+root
+C1sc0123
+systemctl restart elasticsearch.service
+
+http://208.2.2.133:5601
+
+
